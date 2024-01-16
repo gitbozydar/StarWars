@@ -1,7 +1,9 @@
 import { rowData } from "./data.js";
 
 const allButtons = document.getElementById("buttons-container");
+const mainContainer = document.getElementById("main");
 const containerOfTable = document.getElementById("main-container");
+const rootContainer = document.getElementById("root-container");
 
 for (let i = 0; i < Object.keys(rowData).length; i++) {
   const featureButton = document.createElement("button");
@@ -115,6 +117,10 @@ const createTable = (index) => {
     });
 
     secondActionButton.className = "info-button";
+    secondActionButton.id = "more-info-button";
+    secondActionButton.addEventListener("click", () => {
+      infoWindow();
+    });
 
     const trashIcon = document.createElement("img");
     trashIcon.src = "img/bin.png";
@@ -165,6 +171,23 @@ const createTable = (index) => {
   tableFilters.appendChild(selectOptions);
   selectOptions.appendChild(firstOption);
   selectOptions.appendChild(secondOption);
+};
+
+const infoWindow = () => {
+  const popUpWindow = document.createElement("div");
+  popUpWindow.id = "info-window";
+  mainContainer.style.filter = "blur(2px)";
+
+  const infoWindowCloser = document.createElement("button");
+  infoWindowCloser.id = "info-closer-button";
+  infoWindowCloser.innerHTML = "&#9587";
+  infoWindowCloser.addEventListener("click", () => {
+    popUpWindow.remove();
+    mainContainer.style.filter = null;
+  });
+
+  rootContainer.appendChild(popUpWindow);
+  popUpWindow.appendChild(infoWindowCloser);
 };
 
 const tableRowRemove = (idOfRemovedRow) => {
