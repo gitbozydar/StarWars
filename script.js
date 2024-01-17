@@ -5,6 +5,22 @@ const mainContainer = document.getElementById("main");
 const containerOfTable = document.getElementById("main-container");
 const rootContainer = document.getElementById("root-container");
 
+const fadeInInfoWindow = () => {
+  const rootContainer = document.getElementById("root-container");
+  let opacity = 0;
+
+  const fadeInInterval = setInterval(() => {
+    if (opacity < 1) {
+      opacity += 0.1;
+      rootContainer.style.opacity = opacity;
+    } else {
+      clearInterval(fadeInInterval);
+    }
+  }, 60);
+};
+
+setTimeout(fadeInInfoWindow, 1000);
+
 for (let i = 0; i < Object.keys(rowData).length; i++) {
   const featureButton = document.createElement("button");
   featureButton.innerHTML = Object.keys(rowData)[i];
@@ -17,6 +33,26 @@ for (let i = 0; i < Object.keys(rowData).length; i++) {
   });
   allButtons.appendChild(featureButton);
 }
+
+const bioLinksContainer = document.createElement("div");
+bioLinksContainer.id = "bio-links-container";
+const linkedInHref = document.createElement("a");
+linkedInHref.href = "https://www.linkedin.com/in/ivo-delev-b847b72a4/";
+linkedInHref.target = "_blank";
+const gitHubHref = document.createElement("a");
+gitHubHref.href = "https://github.com/gitbozydar";
+gitHubHref.target = "_blank";
+const linkedInImg = document.createElement("img");
+const gitHubImg = document.createElement("img");
+linkedInImg.src = "img/linkedin.png";
+gitHubImg.src = "img/github.png";
+
+mainContainer.appendChild(bioLinksContainer);
+bioLinksContainer.appendChild(gitHubHref);
+bioLinksContainer.appendChild(linkedInHref);
+gitHubHref.appendChild(gitHubImg);
+linkedInHref.appendChild(linkedInImg);
+
 const displayOnScreen = () => {
   document.getElementById("main-container").style.display = "flex";
   document.getElementById("buttons-container").style.display = "none";
@@ -110,17 +146,53 @@ const createTable = (index) => {
 
     const firstActionButton = document.createElement("button");
     const secondActionButton = document.createElement("button");
+    const deleteCheckBox = document.createElement("input");
+    deleteCheckBox.type = "checkbox";
+    deleteCheckBox.className = "checkbox-delete";
+    const deleteCheckedRows = document.createElement("button");
+    deleteCheckedRows.className = "delete-checked-rows";
+    deleteCheckedRows.innerText = "Delete Checked Rows";
+
+    deleteCheckBox.addEventListener("change", () => {
+      if (deleteCheckBox.checked) {
+        tableFilters.appendChild(deleteCheckedRows);
+      } else {
+        deleteCheckedRows.remove();
+      }
+    });
+
     firstActionButton.className = "delete-button";
-    firstActionButton.id = "bin-button";
     firstActionButton.addEventListener("click", () => {
       tableRowRemove(descriptionRow.id);
     });
 
     secondActionButton.className = "info-button";
-    secondActionButton.id = "more-info-button";
     secondActionButton.addEventListener("click", () => {
       infoWindow();
+      showMoreInfoByIndex(firstDescriptionHeader.innerHTML - 1);
+      buttonDisable();
     });
+
+    const showMoreInfoByIndex = (gettingId) => {
+      const moreInfoTable = document.createElement("table");
+      moreInfoTable.id = "more-info-table";
+      const moreInfoDiv = document.getElementById("info-window");
+      moreInfoDiv.appendChild(moreInfoTable);
+      for (let i = 0; i < Object.keys(rowData[selectedKey][i]).length; i++) {
+        const createInfoTableRow = document.createElement("tr");
+        const createInfoTableKeyHeader = document.createElement("th");
+        const createInfoTableValueHeader = document.createElement("th");
+
+        createInfoTableKeyHeader.innerHTML = displayMainRowTitles(index, i);
+        createInfoTableValueHeader.innerHTML = Object.values(
+          rowData[selectedValues][gettingId]
+        )[i];
+
+        moreInfoTable.appendChild(createInfoTableRow);
+        createInfoTableRow.appendChild(createInfoTableKeyHeader);
+        createInfoTableRow.appendChild(createInfoTableValueHeader);
+      }
+    };
 
     const trashIcon = document.createElement("img");
     trashIcon.src = "img/bin.png";
@@ -136,6 +208,7 @@ const createTable = (index) => {
     descriptionRow.appendChild(fifthDescriptionHeader);
     descriptionRow.appendChild(actionDescriptionHeader);
     actionDescriptionHeader.appendChild(buttonsDiv);
+    buttonsDiv.appendChild(deleteCheckBox);
     buttonsDiv.appendChild(firstActionButton);
     buttonsDiv.appendChild(secondActionButton);
     firstActionButton.appendChild(trashIcon);
@@ -174,16 +247,16 @@ const createTable = (index) => {
 };
 
 const infoWindow = () => {
+  mainContainer.style.filter = "blur(2px)";
   const popUpWindow = document.createElement("div");
   popUpWindow.id = "info-window";
-  mainContainer.style.filter = "blur(2px)";
-
   const infoWindowCloser = document.createElement("button");
   infoWindowCloser.id = "info-closer-button";
   infoWindowCloser.innerHTML = "&#9587";
   infoWindowCloser.addEventListener("click", () => {
-    popUpWindow.remove();
     mainContainer.style.filter = null;
+    popUpWindow.remove();
+    buttonDisable();
   });
 
   rootContainer.appendChild(popUpWindow);
@@ -229,3 +302,22 @@ returnButton.addEventListener("click", () => {
   console.clear();
 });
 parentOfReturn.appendChild(returnButton);
+
+const buttonDisable = () => {
+  const infoButton = document.getElementsByClassName("info-button");
+  const binButton = document.getElementsByClassName("delete-button");
+
+  if (document.getElementById("info-window") !== null) {
+    returnButton.setAttribute("disabled", "disabled");
+    for (let k = 0; k < infoButton.length; k++) {
+      infoButton[k].setAttribute("disabled", "disabled");
+      binButton[k].setAttribute("disabled", "disabled");
+    }
+  } else {
+    returnButton.removeAttribute("disabled");
+    for (let k = 0; k < infoButton.length; k++) {
+      infoButton[k].removeAttribute("disabled");
+      binButton[k].removeAttribute("disabled");
+    }
+  }
+};
