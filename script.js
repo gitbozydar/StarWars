@@ -5,21 +5,33 @@ const mainContainer = document.getElementById("main");
 const containerOfTable = document.getElementById("main-container");
 const rootContainer = document.getElementById("root-container");
 
-const fadeInInfoWindow = () => {
-  const rootContainer = document.getElementById("root-container");
+const fadeIn = (element, step) => {
   let opacity = 0;
 
   const fadeInInterval = setInterval(() => {
     if (opacity < 1) {
-      opacity += 0.1;
-      rootContainer.style.opacity = opacity;
+      opacity += step;
+      element.style.opacity = opacity;
     } else {
       clearInterval(fadeInInterval);
     }
   }, 60);
 };
 
-setTimeout(fadeInInfoWindow, 1000);
+const fadeOut = (element, step) => {
+  let opacity = 1;
+
+  const fadeOutInterval = setInterval(() => {
+    if (opacity > 0) {
+      opacity -= step;
+      element.style.opacity = opacity;
+    } else {
+      clearInterval(fadeOutInterval);
+    }
+  }, 60);
+};
+
+setTimeout(fadeIn(document.getElementById("root-container"), 0.04), 3000);
 
 for (let i = 0; i < Object.keys(rowData).length; i++) {
   const featureButton = document.createElement("button");
@@ -27,9 +39,15 @@ for (let i = 0; i < Object.keys(rowData).length; i++) {
   featureButton.id = "showData" + i;
   featureButton.className = "buttons";
   featureButton.addEventListener("click", () => {
-    showInfoByIndex(i);
-    displayOnScreen();
-    createTable(i);
+    setTimeout(() => {
+      showInfoByIndex(i);
+      displayOnScreen();
+      createTable(i);
+    }, 100);
+
+    fadeIn(document.getElementById("main-container"), 0.2);
+    fadeOut(document.getElementById("buttons-container"), 0.1);
+    fadeOut(document.getElementById("bio-links-container"), 0.2);
   });
   allButtons.appendChild(featureButton);
 }
@@ -149,17 +167,74 @@ const createTable = (index) => {
     const deleteCheckBox = document.createElement("input");
     deleteCheckBox.type = "checkbox";
     deleteCheckBox.className = "checkbox-delete";
-    const deleteCheckedRows = document.createElement("button");
-    deleteCheckedRows.className = "delete-checked-rows";
-    deleteCheckedRows.innerText = "Delete Checked Rows";
 
-    deleteCheckBox.addEventListener("change", () => {
-      if (deleteCheckBox.checked) {
-        tableFilters.appendChild(deleteCheckedRows);
-      } else {
-        deleteCheckedRows.remove();
+    // const deleteCheckedRows = document.createElement("button");
+    // deleteCheckedRows.className = "delete-checked-rows";
+    // deleteCheckedRows.innerText = "Delete Checked Rows";
+
+    // let deleteCheckedRows;
+
+    // deleteCheckBox.addEventListener("change", () => {
+    //   if (
+    //     deleteCheckBox.checked &&
+    //     document.getElementById("remove-rows") == null
+    //   ) {
+    //     deleteCheckedRows = document.createElement("button");
+    //     deleteCheckedRows.id = "remove-rows";
+    //     deleteCheckedRows.className = "delete-checked-rows";
+    //     deleteCheckedRows.innerHTML = "Delete Checked Rows";
+    //     tableFilters.appendChild(deleteCheckedRows);
+    //   } else if (
+    //     deleteCheckedRows &&
+    //     !document.querySelector(".checkbox-delete:checked")
+    //   ) {
+    //     {
+    //       deleteCheckedRows.remove();
+    //     }
+    //   }
+    // });
+    let deleteCheckedRows;
+
+    document.addEventListener("change", (event) => {
+      const targetCheckbox = event.target;
+
+      if (targetCheckbox.classList.contains("checkbox-delete")) {
+        updateDeleteButton();
       }
     });
+
+    const updateDeleteButton = () => {
+      const anyCheckboxChecked = document.querySelector(
+        ".checkbox-delete:checked"
+      );
+
+      if (anyCheckboxChecked && !document.getElementById("remove-rows")) {
+        deleteCheckedRows = document.createElement("button");
+        deleteCheckedRows.id = "remove-rows";
+        deleteCheckedRows.className = "delete-checked-rows";
+        deleteCheckedRows.innerHTML = "Delete picked";
+        deleteCheckedRows.addEventListener("click", () => {
+          removeCheckedRows();
+          fadeOut(document.getElementById("remove-rows"), 0.2);
+          setTimeout(removeRowsButton, 400);
+        });
+        rootContainer.appendChild(deleteCheckedRows);
+      } else if (!anyCheckboxChecked && deleteCheckedRows) {
+        deleteCheckedRows.remove();
+      }
+    };
+    const removeCheckedRows = () => {
+      const checkboxes = document.querySelectorAll(".checkbox-delete");
+      checkboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+          const row = checkbox.closest("tr");
+          row.remove();
+        }
+      });
+    };
+    const removeRowsButton = () => {
+      deleteCheckedRows.remove();
+    };
 
     firstActionButton.className = "delete-button";
     firstActionButton.addEventListener("click", () => {
@@ -171,6 +246,7 @@ const createTable = (index) => {
       infoWindow();
       showMoreInfoByIndex(firstDescriptionHeader.innerHTML - 1);
       buttonDisable();
+      fadeIn(document.getElementById("info-window"), 0.2);
     });
 
     const showMoreInfoByIndex = (gettingId) => {
@@ -178,7 +254,11 @@ const createTable = (index) => {
       moreInfoTable.id = "more-info-table";
       const moreInfoDiv = document.getElementById("info-window");
       moreInfoDiv.appendChild(moreInfoTable);
-      for (let i = 0; i < Object.keys(rowData[selectedKey][i]).length; i++) {
+      for (
+        let i = 0;
+        i < Object.keys(rowData[selectedKey][gettingId]).length;
+        i++
+      ) {
         const createInfoTableRow = document.createElement("tr");
         const createInfoTableKeyHeader = document.createElement("th");
         const createInfoTableValueHeader = document.createElement("th");
@@ -255,7 +335,11 @@ const infoWindow = () => {
   infoWindowCloser.innerHTML = "&#9587";
   infoWindowCloser.addEventListener("click", () => {
     mainContainer.style.filter = null;
-    popUpWindow.remove();
+    fadeOut(document.getElementById("info-window"), 0.25);
+    setTimeout(() => {
+      popUpWindow.remove();
+      buttonDisable();
+    }, 200);
     buttonDisable();
   });
 
@@ -271,7 +355,6 @@ const tableRowRemove = (idOfRemovedRow) => {
 const showInfoByIndex = (index) => {
   const keys = Object.keys(rowData);
   const selectedKey = keys[index];
-  console.log(rowData[selectedKey]);
 };
 
 const returnToHome = () => {
@@ -299,25 +382,31 @@ returnButton.addEventListener("click", () => {
   removeTable();
   removeTableFilters();
   returnToHome();
-  console.clear();
+  setTimeout(() => {
+    fadeIn(document.getElementById("buttons-container"), 0.2);
+    fadeIn(document.getElementById("bio-links-container"), 0.2);
+  }, 300);
 });
 parentOfReturn.appendChild(returnButton);
 
 const buttonDisable = () => {
   const infoButton = document.getElementsByClassName("info-button");
   const binButton = document.getElementsByClassName("delete-button");
+  const checkboxes = document.getElementsByClassName("checkbox-delete");
 
   if (document.getElementById("info-window") !== null) {
     returnButton.setAttribute("disabled", "disabled");
     for (let k = 0; k < infoButton.length; k++) {
       infoButton[k].setAttribute("disabled", "disabled");
       binButton[k].setAttribute("disabled", "disabled");
+      checkboxes[k].setAttribute("disabled", "disabled");
     }
   } else {
     returnButton.removeAttribute("disabled");
     for (let k = 0; k < infoButton.length; k++) {
       infoButton[k].removeAttribute("disabled");
       binButton[k].removeAttribute("disabled");
+      checkboxes[k].removeAttribute("disabled");
     }
   }
 };

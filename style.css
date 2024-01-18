@@ -15,6 +15,7 @@ body {
 }
 #root-container {
   opacity: 0;
+  width: 100%;
 }
 body {
   cursor: url(https://cur.cursors-4u.net/others/oth-1/oth24.cur), auto !important;
@@ -142,6 +143,9 @@ button:hover {
     transform: rotate(360deg);
   }
 }
+#main-container {
+  opacity: 0;
+}
 table,
 th,
 td {
@@ -155,12 +159,14 @@ tr {
 tr th:nth-child(6) div {
   display: flex;
   justify-content: center;
-  gap: 16px;
+
+  gap: 12px;
 }
 tr th:nth-child(6) div button {
   display: flex;
   height: 25px;
   width: 25px;
+
   border-radius: 4px;
   border: none;
 }
@@ -201,6 +207,7 @@ tr:nth-child(1) {
 #info-window {
   display: flex;
   position: absolute;
+  opacity: 0;
   background: linear-gradient(
     170deg,
     rgb(106, 0, 206) 25%,
@@ -279,6 +286,7 @@ tr:nth-child(1) {
 .checkbox-delete {
   height: 25px;
   width: 25px;
+  cursor: inherit;
 }
 .table-filters {
   display: flex;
@@ -290,7 +298,14 @@ tr:nth-child(1) {
 }
 .delete-checked-rows {
   display: flex;
-  width: 150px;
+  position: fixed;
+  opacity: 1;
+  right: 5%;
+  font-family: inherit;
+  bottom: 5%;
+  align-items: center;
+  justify-content: center;
+  width: 10%;
   height: 40px;
   border-radius: 10px;
   border: none;
