@@ -397,6 +397,9 @@ returnButton.addEventListener("click", () => {
   removeTable();
   removeTableFilters();
   returnToHome();
+  if (document.getElementById("remove-rows") !== null) {
+    document.getElementById("remove-rows").remove();
+  }
   setTimeout(() => {
     fadeIn(document.getElementById("buttons-container"), 0.2);
     fadeIn(document.getElementById("bio-links-container"), 0.2);
@@ -408,15 +411,18 @@ const buttonDisable = () => {
   const infoButton = document.getElementsByClassName("info-button");
   const binButton = document.getElementsByClassName("delete-button");
   const checkboxes = document.getElementsByClassName("checkbox-delete");
+  const removePickedBoxes = document.getElementById("remove-rows");
 
   if (document.getElementById("info-window") !== null) {
     returnButton.setAttribute("disabled", "disabled");
+    removePickedBoxes.setAttribute("disabled", "disabled");
     for (let k = 0; k < infoButton.length; k++) {
       infoButton[k].setAttribute("disabled", "disabled");
       binButton[k].setAttribute("disabled", "disabled");
       checkboxes[k].setAttribute("disabled", "disabled");
     }
   } else {
+    removePickedBoxes.removeAttribute("disabled");
     returnButton.removeAttribute("disabled");
     for (let k = 0; k < infoButton.length; k++) {
       infoButton[k].removeAttribute("disabled");
