@@ -312,3 +312,8 @@ tr:nth-child(1) {
   background-color: rgb(255, 52, 52);
   box-shadow: 2px 7px 38px -3px rgba(0, 0, 0, 0.61);
 }
+button:disabled {
+  opacity: 0.5;
+  scale: 1;
+  transform: none;
+}

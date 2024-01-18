@@ -207,20 +207,38 @@ const createTable = (index) => {
       const anyCheckboxChecked = document.querySelector(
         ".checkbox-delete:checked"
       );
+      const binButton = document.getElementsByClassName("delete-button");
+      const infoButton = document.getElementsByClassName("info-button");
+
+      const removeRowsButton = () => {
+        deleteCheckedRows.remove();
+        for (let k = 0; k < infoButton.length; k++) {
+          binButton[k].removeAttribute("disabled");
+        }
+      };
 
       if (anyCheckboxChecked && !document.getElementById("remove-rows")) {
         deleteCheckedRows = document.createElement("button");
         deleteCheckedRows.id = "remove-rows";
         deleteCheckedRows.className = "delete-checked-rows";
         deleteCheckedRows.innerHTML = "Delete picked";
+
+        for (let k = 0; k < infoButton.length; k++) {
+          binButton[k].setAttribute("disabled", "disabled");
+        }
+
         deleteCheckedRows.addEventListener("click", () => {
           removeCheckedRows();
           fadeOut(document.getElementById("remove-rows"), 0.2);
           setTimeout(removeRowsButton, 400);
         });
+
         rootContainer.appendChild(deleteCheckedRows);
       } else if (!anyCheckboxChecked && deleteCheckedRows) {
         deleteCheckedRows.remove();
+        for (let k = 0; k < infoButton.length; k++) {
+          binButton[k].removeAttribute("disabled");
+        }
       }
     };
     const removeCheckedRows = () => {
@@ -231,9 +249,6 @@ const createTable = (index) => {
           row.remove();
         }
       });
-    };
-    const removeRowsButton = () => {
-      deleteCheckedRows.remove();
     };
 
     firstActionButton.className = "delete-button";
