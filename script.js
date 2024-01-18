@@ -161,6 +161,7 @@ const createTable = (index) => {
     const actionDescriptionHeader = document.createElement("th");
 
     const buttonsDiv = document.createElement("div");
+    buttonsDiv.className = "actions-div";
 
     const firstActionButton = document.createElement("button");
     const secondActionButton = document.createElement("button");
@@ -189,6 +190,7 @@ const createTable = (index) => {
         deleteCheckedRows.remove();
         for (let k = 0; k < infoButton.length; k++) {
           binButton[k].removeAttribute("disabled");
+          infoButton[k].removeAttribute("disabled");
         }
       };
 
@@ -200,6 +202,7 @@ const createTable = (index) => {
 
         for (let k = 0; k < infoButton.length; k++) {
           binButton[k].setAttribute("disabled", "disabled");
+          infoButton[k].setAttribute("disabled", "disabled");
         }
 
         deleteCheckedRows.addEventListener("click", () => {
@@ -213,6 +216,7 @@ const createTable = (index) => {
         deleteCheckedRows.remove();
         for (let k = 0; k < infoButton.length; k++) {
           binButton[k].removeAttribute("disabled");
+          infoButton[k].removeAttribute("disabled");
         }
       }
     };
@@ -288,6 +292,14 @@ const createTable = (index) => {
     buttonsDiv.appendChild(secondActionButton);
     firstActionButton.appendChild(trashIcon);
     secondActionButton.appendChild(infoIcon);
+    if (window.innerWidth <= 1500) {
+      createThirdHeader.remove();
+      createFourthHeader.remove();
+      createFifthHeader.remove();
+      thirdDescriptionHeader.remove();
+      fourthDescriptionHeader.remove();
+      fifthDescriptionHeader.remove();
+    }
   }
   const tableFilters = document.createElement("div");
   tableFilters.className = "table-filters";

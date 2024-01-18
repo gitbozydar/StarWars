@@ -32,7 +32,6 @@ body {
 main {
   display: flex;
   align-items: center;
-
   flex-direction: column;
   justify-content: center;
   gap: 15px;
@@ -149,6 +148,7 @@ button:hover {
 table,
 th,
 td {
+  width: 100%;
   border: 1px solid black;
   border-collapse: collapse;
   font-weight: 500;
@@ -156,20 +156,20 @@ td {
 tr {
   height: 10px;
 }
-tr th:nth-child(6) div {
+.actions-div {
   display: flex;
   justify-content: center;
-
   gap: 12px;
 }
-tr th:nth-child(6) div button {
+
+.actions-div button {
   display: flex;
   height: 25px;
   width: 25px;
-
   border-radius: 4px;
   border: none;
 }
+
 .delete-button {
   background-color: rgb(255, 4, 4);
   display: flex;
@@ -196,10 +196,22 @@ tr th:nth-child(6) div button {
 .info-button:hover {
   background-color: rgb(209, 188, 0);
 }
-
-th:nth-child(1) {
-  width: 5%;
+th:nth-child(2) {
+  width: 30%;
 }
+th:nth-child(3) {
+  width: 30%;
+}
+th:nth-child(4) {
+  width: 10%;
+}
+th:nth-child(5) {
+  width: 17%;
+}
+th:nth-child(1) {
+  width: 10%;
+}
+
 tr:nth-child(1) {
   height: 5%;
   background-color: rgba(29, 0, 133, 0.404);
@@ -316,4 +328,40 @@ button:disabled {
   opacity: 0.5;
   scale: 1;
   transform: none;
+}
+@media only screen and (max-width: 375px) {
+  .buttons {
+    width: 100%;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    font-size: 60px;
+    text-align: center;
+    line-height: 100%;
+  }
+  .buttonsContainer {
+    width: 50%;
+    gap: 20px;
+    flex-direction: column;
+  }
+  #info-window {
+    width: 80%;
+  }
+  .actions-div {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+  .actions-div button {
+    border: none;
+  }
+  .delete-checked-rows {
+    width: 30%;
+    height: 30px;
+    letter-spacing: -0.8px;
+    font-size: 12px;
+  }
 }
