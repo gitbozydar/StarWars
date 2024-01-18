@@ -168,31 +168,6 @@ const createTable = (index) => {
     deleteCheckBox.type = "checkbox";
     deleteCheckBox.className = "checkbox-delete";
 
-    // const deleteCheckedRows = document.createElement("button");
-    // deleteCheckedRows.className = "delete-checked-rows";
-    // deleteCheckedRows.innerText = "Delete Checked Rows";
-
-    // let deleteCheckedRows;
-
-    // deleteCheckBox.addEventListener("change", () => {
-    //   if (
-    //     deleteCheckBox.checked &&
-    //     document.getElementById("remove-rows") == null
-    //   ) {
-    //     deleteCheckedRows = document.createElement("button");
-    //     deleteCheckedRows.id = "remove-rows";
-    //     deleteCheckedRows.className = "delete-checked-rows";
-    //     deleteCheckedRows.innerHTML = "Delete Checked Rows";
-    //     tableFilters.appendChild(deleteCheckedRows);
-    //   } else if (
-    //     deleteCheckedRows &&
-    //     !document.querySelector(".checkbox-delete:checked")
-    //   ) {
-    //     {
-    //       deleteCheckedRows.remove();
-    //     }
-    //   }
-    // });
     let deleteCheckedRows;
 
     document.addEventListener("change", (event) => {
@@ -258,6 +233,11 @@ const createTable = (index) => {
 
     secondActionButton.className = "info-button";
     secondActionButton.addEventListener("click", () => {
+      if (document.getElementById("remove-rows")) {
+        document
+          .getElementById("remove-rows")
+          .setAttribute("disabled", "disabled");
+      }
       infoWindow();
       showMoreInfoByIndex(firstDescriptionHeader.innerHTML - 1);
       buttonDisable();
@@ -350,6 +330,9 @@ const infoWindow = () => {
   infoWindowCloser.innerHTML = "&#9587";
   infoWindowCloser.addEventListener("click", () => {
     mainContainer.style.filter = null;
+    if (document.getElementById("remove-rows") !== null) {
+      document.getElementById("remove-rows").removeAttribute("disabled");
+    }
     fadeOut(document.getElementById("info-window"), 0.25);
     setTimeout(() => {
       popUpWindow.remove();
@@ -411,18 +394,16 @@ const buttonDisable = () => {
   const infoButton = document.getElementsByClassName("info-button");
   const binButton = document.getElementsByClassName("delete-button");
   const checkboxes = document.getElementsByClassName("checkbox-delete");
-  const removePickedBoxes = document.getElementById("remove-rows");
 
   if (document.getElementById("info-window") !== null) {
     returnButton.setAttribute("disabled", "disabled");
-    removePickedBoxes.setAttribute("disabled", "disabled");
+
     for (let k = 0; k < infoButton.length; k++) {
       infoButton[k].setAttribute("disabled", "disabled");
       binButton[k].setAttribute("disabled", "disabled");
       checkboxes[k].setAttribute("disabled", "disabled");
     }
   } else {
-    removePickedBoxes.removeAttribute("disabled");
     returnButton.removeAttribute("disabled");
     for (let k = 0; k < infoButton.length; k++) {
       infoButton[k].removeAttribute("disabled");
