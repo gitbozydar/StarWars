@@ -292,7 +292,8 @@ const createTable = (index) => {
     buttonsDiv.appendChild(secondActionButton);
     firstActionButton.appendChild(trashIcon);
     secondActionButton.appendChild(infoIcon);
-    if (window.innerWidth <= 450) {
+
+    if (window.matchMedia("(max-width: 500px)").matches) {
       createThirdHeader.remove();
       createFourthHeader.remove();
       createFifthHeader.remove();

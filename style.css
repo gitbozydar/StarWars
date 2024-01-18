@@ -329,7 +329,12 @@ button:disabled {
   scale: 1;
   transform: none;
 }
-@media only screen and (max-width: 375px) {
+@media only screen and (max-width: 500px) {
+  body {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
   .buttons {
     width: 100%;
     font-size: 18px;
@@ -340,6 +345,7 @@ button:disabled {
     align-items: center;
     font-size: 60px;
     text-align: center;
+    height: 150px;
     line-height: 100%;
   }
   .buttonsContainer {
