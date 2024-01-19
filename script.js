@@ -40,7 +40,6 @@ for (let i = 0; i < Object.keys(rowData).length; i++) {
   featureButton.className = "buttons";
   featureButton.addEventListener("click", () => {
     setTimeout(() => {
-      showInfoByIndex(i);
       displayOnScreen();
       createTable(i);
     }, 100);
@@ -121,6 +120,7 @@ const createTable = (index) => {
     descriptionRow.id = "row" + i;
     createTable.appendChild(descriptionRow);
     const firstDescriptionHeader = document.createElement("th");
+    firstDescriptionHeader.className = "id-row";
     firstDescriptionHeader.innerHTML = i + 1;
     descriptionRow.appendChild(firstDescriptionHeader);
 
@@ -302,23 +302,32 @@ const createTable = (index) => {
       fifthDescriptionHeader.remove();
     }
   }
+
   const tableFilters = document.createElement("div");
   tableFilters.className = "table-filters";
   tableFilters.id = "filters";
 
   const pageLeftButton = document.createElement("button");
+  pageLeftButton.className = "page-arrows";
   pageLeftButton.innerHTML = "&larr;";
 
   const pageRightButton = document.createElement("button");
+  pageRightButton.className = "page-arrows";
   pageRightButton.innerHTML = "&rarr;";
 
   const inputOfRows = document.createElement("input");
-  inputOfRows.placeholder = "1";
+  const maxInput = document.querySelectorAll(".id-row");
+  const maxInputLast = maxInput.length;
+
+  inputOfRows.placeholder = 1 + "-" + maxInputLast;
   inputOfRows.id = "input-rows";
   inputOfRows.type = "number";
-  inputOfRows.min = "1";
+  inputOfRows.min = 1;
+
+  inputOfRows.max = maxInputLast;
 
   const selectOptions = document.createElement("select");
+  selectOptions.className = "selector";
   const firstOption = document.createElement("option");
   const secondOption = document.createElement("option");
 
@@ -363,10 +372,10 @@ const tableRowRemove = (idOfRemovedRow) => {
   pickedRow.remove();
 };
 
-const showInfoByIndex = (index) => {
-  const keys = Object.keys(rowData);
-  const selectedKey = keys[index];
-};
+// const showInfoByIndex = (index) => {
+//   const keys = Object.keys(rowData);
+//   const selectedKey = keys[index];
+// };
 
 const returnToHome = () => {
   document.getElementById("main-container").style.display = "none";
