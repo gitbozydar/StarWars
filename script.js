@@ -372,11 +372,6 @@ const tableRowRemove = (idOfRemovedRow) => {
   pickedRow.remove();
 };
 
-// const showInfoByIndex = (index) => {
-//   const keys = Object.keys(rowData);
-//   const selectedKey = keys[index];
-// };
-
 const returnToHome = () => {
   document.getElementById("main-container").style.display = "none";
   document.getElementById("buttons-container").style.display = "flex";
